@@ -39,6 +39,7 @@ type Props = {
   onZoom: (isZoomed: boolean) => void;
   doubleTapToZoomEnabled: boolean;
   onLongPress: () => void;
+  onPress: (event: GestureResponderEvent) => void;
   delayLongPress: number;
 };
 
@@ -48,6 +49,7 @@ const usePanResponder = ({
   onZoom,
   doubleTapToZoomEnabled,
   onLongPress,
+  onPress,
   delayLongPress,
 }: Props): Readonly<
   [GestureResponderHandlers, Animated.Value, Animated.ValueXY]
@@ -199,6 +201,7 @@ const usePanResponder = ({
         lastTapTS = null;
       } else {
         lastTapTS = Date.now();
+        onPress(event);
       }
     },
     onMove: (
@@ -280,9 +283,8 @@ const usePanResponder = ({
       if (isTapGesture && currentScale > initialScale) {
         const { x, y } = currentTranslate;
         const { dx, dy } = gestureState;
-        const [topBound, leftBound, bottomBound, rightBound] = getBounds(
-          currentScale
-        );
+        const [topBound, leftBound, bottomBound, rightBound] =
+          getBounds(currentScale);
 
         let nextTranslateX = x + dx;
         let nextTranslateY = y + dy;
@@ -347,9 +349,8 @@ const usePanResponder = ({
 
       if (tmpTranslate) {
         const { x, y } = tmpTranslate;
-        const [topBound, leftBound, bottomBound, rightBound] = getBounds(
-          currentScale
-        );
+        const [topBound, leftBound, bottomBound, rightBound] =
+          getBounds(currentScale);
 
         let nextTranslateX = x;
         let nextTranslateY = y;

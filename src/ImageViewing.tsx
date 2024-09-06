@@ -13,6 +13,7 @@ import {
   StyleSheet,
   View,
   VirtualizedList,
+  GestureResponderEvent,
   ModalProps,
   Modal,
 } from "react-native";
@@ -33,6 +34,7 @@ type Props = {
   visible: boolean;
   onRequestClose: () => void;
   onLongPress?: (image: ImageSource) => void;
+  onPress?: (event: GestureResponderEvent) => void;
   onImageIndexChange?: (imageIndex: number) => void;
   presentationStyle?: ModalProps["presentationStyle"];
   animationType?: ModalProps["animationType"];
@@ -57,6 +59,7 @@ function ImageViewing({
   visible,
   onRequestClose,
   onLongPress = () => {},
+  onPress = () => {},
   onImageIndexChange,
   animationType = DEFAULT_ANIMATION_TYPE,
   backgroundColor = DEFAULT_BG_COLOR,
@@ -137,6 +140,7 @@ function ImageViewing({
               imageSrc={imageSrc}
               onRequestClose={onRequestCloseEnhanced}
               onLongPress={onLongPress}
+              onPress={onPress}
               delayLongPress={delayLongPress}
               swipeToCloseEnabled={swipeToCloseEnabled}
               doubleTapToZoomEnabled={doubleTapToZoomEnabled}

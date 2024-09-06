@@ -38,6 +38,7 @@ type Props = {
   onRequestClose: () => void;
   onZoom: (scaled: boolean) => void;
   onLongPress: (image: ImageSource) => void;
+  onPress: (event: GestureResponderEvent) => void;
   delayLongPress: number;
   swipeToCloseEnabled?: boolean;
   doubleTapToZoomEnabled?: boolean;
@@ -48,6 +49,7 @@ const ImageItem = ({
   onZoom,
   onRequestClose,
   onLongPress,
+  onPress,
   delayLongPress,
   swipeToCloseEnabled = true,
   doubleTapToZoomEnabled = true,
@@ -56,7 +58,12 @@ const ImageItem = ({
   const [loaded, setLoaded] = useState(false);
   const [scaled, setScaled] = useState(false);
   const imageDimensions = useImageDimensions(imageSrc);
-  const handleDoubleTap = useDoubleTapToZoom(scrollViewRef, scaled, SCREEN);
+  const handleDoubleTap = useDoubleTapToZoom(
+    scrollViewRef,
+    scaled,
+    SCREEN,
+    onPress
+  );
 
   const [translate, scale] = getImageTransform(imageDimensions, SCREEN);
   const scrollValueY = new Animated.Value(0);
@@ -109,6 +116,13 @@ const ImageItem = ({
   const onLongPressHandler = useCallback(
     (event: GestureResponderEvent) => {
       onLongPress(imageSrc);
+    },
+    [imageSrc, onLongPress]
+  );
+
+  const onPressHandler = useCallback(
+    (event: GestureResponderEvent) => {
+      onPress(event);
     },
     [imageSrc, onLongPress]
   );

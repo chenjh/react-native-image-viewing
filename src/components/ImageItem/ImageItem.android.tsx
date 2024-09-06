@@ -13,8 +13,10 @@ import {
   ScrollView,
   Dimensions,
   StyleSheet,
+  NativeTouchEvent,
   NativeScrollEvent,
   NativeSyntheticEvent,
+  GestureResponderEvent,
   NativeMethodsMixin,
 } from "react-native";
 
@@ -36,6 +38,7 @@ type Props = {
   onRequestClose: () => void;
   onZoom: (isZoomed: boolean) => void;
   onLongPress: (image: ImageSource) => void;
+  onPress: (event: GestureResponderEvent) => void;
   delayLongPress: number;
   swipeToCloseEnabled?: boolean;
   doubleTapToZoomEnabled?: boolean;
@@ -46,6 +49,7 @@ const ImageItem = ({
   onZoom,
   onRequestClose,
   onLongPress,
+  onPress,
   delayLongPress,
   swipeToCloseEnabled = true,
   doubleTapToZoomEnabled = true,
@@ -73,12 +77,20 @@ const ImageItem = ({
     onLongPress(imageSrc);
   }, [imageSrc, onLongPress]);
 
+  const onPressHandler = useCallback(
+    (event: GestureResponderEvent) => {
+      onPress(event);
+    },
+    [imageSrc, onLongPress]
+  );
+
   const [panHandlers, scaleValue, translateValue] = usePanResponder({
     initialScale: scale || 1,
     initialTranslate: translate || { x: 0, y: 0 },
     onZoom: onZoomPerformed,
     doubleTapToZoomEnabled,
     onLongPress: onLongPressHandler,
+    onPress: onPressHandler,
     delayLongPress,
   });
 
